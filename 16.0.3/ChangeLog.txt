@@ -1,0 +1,12 @@
+Changement Version 16.0.3
+
+ • Nouvelle icône pour les Projets : Diagram => Tirelire
+ • Affichage du budget restant sous le projets dans l'entête d'une commande si budget saisie dans la fiche projet => alerte si fonds insuffisant (Attention cela prend en toutes les commande même les brouillons)
+ • Affichage du nombre de produits à (ou restant à) receptionner d'une commande via l'onglet "Receptions" (= produits dans le système avec suivi du stock), si produit pas en suivi de stock il faut passer comme d'habitude par "Classer le Reception", cela est une aide visuel
+  • Nouveau modèle PDF pour les bon de commande interne :
+		- Optimisation code => Fichier plus léger
+		- Affichage de nombreuses informations directement dans l'entête après les notes (Devis, Commun, Numéro de commande, Destinataire de commande)
+		- Affichage d'information sur les lignes produits (Code Nacre, Devis, Produit Pour)
+ • Correction de divers bug et optimisation code
+ • Divers changement graphique
+ 
