@@ -1,0 +1,97 @@
+﻿==========
+18.0
+==========
+[X] htdocs/main.inc.php
+	Traduction mode maintenance
+
+[X] htdocs/core/ajax/selectsearchbox.php
+	Produit premier dans la liste de recherche
+		
+[X] htdocs/core/boxes/box_produits_alerte_stock.php
+	Maximum de lignes affichées
+	Passage d'alerte sur produit en achat
+	Affichage Statut de commande
+	
+[X] htdocs/core/boxes/box_supplier_orders_awaiting_reception.php
+	Affichage date de commade si date de livraison inconnue
+	
+[X] htdocs/core/boxes/modules_boxes.php
+	Affichage barre de défilement si >10 lignes
+	
+[X] htdocs/core/class/html.formprojet.class.php
+	Affichage budget restant dans liste projets dans commandes
+
+[X] htdocs/core/class/html.formfile.class.php
+	Affichage des nom de fichers dans preview/download
+	
+[X] htdocs/core/class/extrafields.class.php
+	Remplacement puces
+
+[X] htdocs/core/lib/fourn.lib.php
+	Ne compte que les produits dans le système et ne s'affiche que si > 0
+
+[X] htdocs/core/lib/functions.lib.php
+	Changement icone projet
+
+[X] htdocs/core/lib/pdf.lib.php
+	Mise en gras Référence Fournisseur
+	
+[X] htdocs/core/modules/supplier_order/doc/pdf_TrEE.modules.php
+	New Template PDF bon de commande
+	
+[X] htdocs/core/modules/modResource.class.php
+	Redéplacement du menu "Equipements" dans "Outils" (Si non affichage, il faut désactiver/activer le module Equipements)
+	
+[X] htdocs/core/tpl/objectline_create.tpl.php
+	Affichage ou masquage champs en fonction produit prédéfinie ou non
+
+[X] htdocs/fourn/class/fournisseur.commande.class.php
+	Décommentage pour alerte si date livraison dépassée
+	
+[X] htdocs/fourn/commande/card.php	
+	Utilisation de la référence founisseurs saisie ou système sur produit prédéfinie
+	Alerte Retard date de commande/Date de livraison fiche commande
+	
+[X] htdocs/fourn/commande/list.php
+	Alerte Retard date de commande/Date de livraison liste commande
+	
+[X] htdocs/install/mysql/migration/17.0.0-18.0.0.sql
+	Modifie les paramètres de la table llx_extrafields pour augmenter la taille des listes
+	Ajoute les colonnes manquantes si elles n'existent pas dans la table llx_projet
+	
+[X] htdocs/install/mysql/tables/*
+	Modification pour table en cas d'installation neuve
+	
+[X] htdocs/product/card.php
+	Statut par défaut Hors Vente
+
+[X] htdocs/projet/class/project.class.php
+	Budget Restant
+	
+[X] htdocs/projet/card.php
+	Budget Restant
+	
+[X] htdocs/projet/contact.php
+	Budget Restant
+	
+[X] htdocs/projet/element.php
+	Budget Restant
+	Masquage tableaux inutiles
+
+[X] htdocs/projet/list.php
+	Budget Restant
+	Déplacement alerte après date
+	
+[Custom CSS] htdocs/theme/eldy/badges.inc.php
+	Ajout Couleur pour produit En vente (En contrat)
+	
+[Custom CSS] htdocs/theme/eldy/global.inc.php
+	Uniformisation message sous login
+	
+[Custom CSS] htdocs/theme/eldy/info-box.inc.php
+	Remplacement icone
+	
+[Custom CSS] htdocs/theme/eldy/main_menu_fa_icons.inc.php
+	Icone Menu Projet
+	Icone Retour au Blog/
+	
