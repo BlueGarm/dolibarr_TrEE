@@ -1,0 +1,194 @@
+==========
+14.0.2
+==========
+[X] htdocs/core/ajax/selectsearchbox.php
+	line 79 : Produit premier dans la liste de recherche
+	if (((!empty($conf->product->enabled) && $user->rights->produit->lire) || (!empty($conf->service->enabled) && $user->rights->service->lire))
+	&& empty($conf->global->MAIN_SEARCHFORM_PRODUITSERVICE_DISABLED))
+	{
+		$arrayresult['searchintoproduct'] = array('position'=>5, 'shortcut'=>'P', 'img'=>'object_product', 'label'=>$langs->trans("SearchIntoProductsOrServices", $search_boxvalue), 'text'=>img_picto('', 'object_product').' '.$langs->trans("SearchIntoProductsOrServices", $search_boxvalue), 'url'=>DOL_URL_ROOT.'/product/list.php'.($search_boxvalue ? '?sall='.urlencode($search_boxvalue) : ''));
+	}
+
+[X] htdocs/core/boxes/box_produits_alerte_stock.php
+	line 97 : Passage d'alerte sur produit en achat
+	$sql .= " AND p.tobuy = 1 OR p.tosell = 1 AND p.seuil_stock_alerte > 0";
+	line 208 : Remplacement de 0 par 1 pour affichage correct "Actif"
+	'text' => '<span class="statusrefbuy">'.$productstatic->LibStatut($objp->tobuy, 3, 1).'</span>',
+	
+	++ Modifications pour affiche iônes en fonction du statut de commande
+	
+[X] htdocs/core/boxes/box_supplier_orders_awaiting_reception.php
+	line 126 : Ajout variable date de commande
+					$supplierorderstatic->date_commande = $date;
+					
+	line 163 : Ajout icone et date pour date de commande
+					if (!empty($delivery_date)) {
+						$this->info_box_contents[$line][] = array(
+							'td' => 'class="right"',
+							'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('DateDeliveryPlanned').' : ' . dol_print_date($delivery_date, 'day', 'tzuserrel').'"><i class="fa fa-dolly" style="margin-left: 5px;"></i> '.dol_print_date($delivery_date, 'day', 'tzuserrel').'</span>',
+							'asis' => 1
+						);
+					} else {
+						$this->info_box_contents[$line][] = array(
+							'td' => 'class="right"',
+							'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('Date de Commande').' : ' . dol_print_date($date, 'day', 'tzuserrel').'"><i class="fas fa-file-export" style="margin-left: 5px;"></i> '.dol_print_date($date, 'day', 'tzuserrel').'</span>',
+							'asis' => 1
+						);
+					}
+					
+[X] htdocs/core/class/html.formprojet.class.php
+	line 165 : ajout buget dans requete SQL
+				$sql = 'SELECT p.rowid, p.ref, p.title, p.fk_soc, p.fk_statut, p.public, p.budget_amount, p.budget_rest, s.nom as name, s.name_alias';
+	line 220 : Affichage budget restant dans choix commande
+		if ($obj->budget_amount != '') {
+							// Mise a Jour de la BDD au reload de la page
+							$sql = 'SELECT SUM(total_ht) as total_ht FROM llx_commande_fournisseur WHERE fk_projet = '.$obj->rowid;
+							$total_commande = $this->db->query($sql);
+							$total_commande = $total_commande->fetch_assoc();
+							$budget_rest = (($obj->budget_amount)-($total_commande["total_ht"]));
+							$sql = 'UPDATE llx_projet SET budget_rest = ' . $budget_rest . ' WHERE llx_projet.rowid = ' . $obj->rowid;
+							$update = $this->db->query($sql);
+							$labeltoshow .= ' ('.price($obj->budget_rest, '', $langs, 1, 0, 2, $conf->currency).')';
+						}
+
+[X] htdocs/core/lib/pdf.lib.php
+	line 1450 : Mise en gras référence fournisseur
+				$ref_prodserv = '<b>'.$ref_supplier.'</b>';
+				
+[X] htdocs/core/modules/supplier_order/doc
+	Ajout du template Marguaux
+	
+[X] htdocs/core/tpl/objectline_create.tpl.php
+	line 983 : Affichage code nacre
+		jQuery("#price_ht, #multicurrency_price_ht, #price_ttc, #price_ttc, #fourn_ref, #tva_tx, #buying_price, #title_fourn_ref, #title_vat, #title_up_ht, #title_up_ht_currency, #title_up_ttc, #title_up_ttc_currency, .commande_fournisseurdet_extras_cnacre, .commande_fournisseurdet_extras_add_bdd").show();
+	line 1001 : Masquage code nacre & Affichage Référence fournisseurs
+		jQuery("#price_ttc, #fourn_ref, #tva_tx, #title_vat, #title_up_ttc, #title_up_ttc_currency, .commande_fournisseurdet_extras_cnacre, .commande_fournisseurdet_extras_add_bdd").hide();
+	line 1003 : Affichage champs référence fournisseur
+		jQuery("#buying_price, #fourn_ref").show();
+		
+[X] htdocs/public/theme/common/
+	Modification d'images
+	
+[?] htdocs/fourn/class/fournisseur.commande.class.php
+	line 3199-3200 : Decommentage (//) else
+	
+[X] htdocs/fourn/commande/card.php
+	line 2008 : Alerte Retard date de commande/Date de livraison fiche commande
+		if ($object->hasDelay() && empty($object->date_livraison) && !empty($object->date_commande)) {
+	line 533 : Saisie référence fournisseurs sur produit prédéfinit
+		// Utilisation de la référence founisseurs saisie ou système
+		if (!empty(GETPOST('fourn_ref', 'alpha'))) {
+			$ref_supplier = GETPOST('fourn_ref', 'alpha');
+		} else {
+			$ref_supplier = $productsupplier->ref_supplier;
+		}
+	
+[X] htdocs/fourn/commande/list.php
+	line 1421 : Alerte Retard date de commande/Date de livraison liste commande
+		// Order date
+		if (!empty($arrayfields['cf.date_commande']['checked']))
+		{
+			print '<td class="center">';
+			print dol_print_date($db->jdate($obj->date_commande), 'day');
+			if ($objectstatic->statut != $objectstatic::STATUS_ORDERSENT || $objectstatic->statut != $objectstatic::STATUS_RECEIVED_PARTIALLY) {
+				if ($objectstatic->hasDelay() && empty($objectstatic->delivery_date)) {
+					print ' '.img_picto($langs->trans("Late").' : '.$objectstatic->showDelay(), "warning");
+				}
+			}
+			print '</td>';
+			if (!$i) $totalarray['nbfield']++;
+		}
+		// Plannned date of delivery
+		if (!empty($arrayfields['cf.date_livraison']['checked']))
+		{
+			print '<td class="center">';
+			print dol_print_date($db->jdate($obj->date_livraison), 'day');
+			if ($objectstatic->statut == $objectstatic::STATUS_ORDERSENT || $objectstatic->statut == $objectstatic::STATUS_RECEIVED_PARTIALLY) {
+				if ($objectstatic->hasDelay() && !empty($objectstatic->delivery_date)) {
+					print ' '.img_picto($langs->trans("Late").' : '.$objectstatic->showDelay(), "warning");
+				}
+			}
+			print '</td>';
+			if (!$i) $totalarray['nbfield']++;
+		}
+			
+[X] htdocs/product/card.php
+	line 1092 : Statut par défaut Hors Vente
+		$statutarray = array('0' => $langs->trans("NotOnSell"), '1' => $langs->trans("OnSell"));
+		
+[X] htdocs/product/inventory/inventory.php
+	line 646 : Ajout du label après la référence
+			// Ligne de produit Réf(lien) - Label
+			print $product_static->getNomUrl(1) . ' - ' . $product_static->label;
+		
+[X] htdocs/projet/class/project.class.php
+[X] htdocs/projet/card.php
+[X] htdocs/projet/contact.php
+[X] htdocs/projet/element.php
+	line 362-418 : Commantage pour désactivation tableaux inutiles
+	line 441-487 : Commantage pour désactivation tableaux inutiles
+	line 1516 : Ajout du budget restant si budget définit
+			// Affichage Budget Restant
+			if (!empty($object->budget_amount))
+			{
+				print '<b>Budget HT Restant : ';
+				$budget_rest = $object->budget_amount - $total_ht;
+				
+				print price($budget_rest, '', $langs, 1, 0, 2, $conf->currency);
+[X] htdocs/projet/list.php
+
+[/] htdocs/theme/eldy/main_menu_fa_icons.inc.php
+	line 122 : Icones menu projet
+			content: "\?";
+	
+	line 133 : Icône menu retour blog
+		div.mainmenu.blog::before {
+			content: "\f2f5";
+		}
+
+[X] htdocs/theme/eldy/badges.inc.php
+	line 195 : Ajout Couleur pour produit En vente (En contrat)
+.statusrefsell .badge-status4 {
+	background-color: #1e73be!important;
+}
+
+[X] htdocs/theme/eldy/btn.inc.php
+	line 14 : Violet -> Vert
+            --butactionbg:rgba(218, 235, 225, 0.95); /* Changement Couleur violet à vert*/
+	line 75 : But Action 
+			color: #444 !important;	
+	line 152-157 : Bouton action Delete !important
+		.butActionDelete, .butActionDelete:link, .butActionDelete:visited, .butActionDelete:hover, .butActionDelete:active, .buttonDelete, .button-cancel { /* Ajout .button-cancel */
+			background: var(--butactiondeletebg)!important; /* Ajout attribut !important */
+			/* border: 1px solid #633; */
+			color: #633!important;
+			border-radius: 3px; /* Changement : Ajout d'un angle arrondie */
+		}	
+	
+[X] htdocs/theme/eldy/global.inc.php
+	line 193 :
+			color: #444 /* Changement Couleurs #FFF to #444 */	
+	line 2655 : Uniformisation block message sous login
+			div.backgroundsemitransparent {
+				background:rgba(255, 255, 255, 0.9);
+				padding-left: 6px;
+				padding-right: 6px;
+			}
+			
+	line 2608 : Uniformisation block message sous login
+			.login_main_home {
+				word-break: break-word;
+				max-width: 560px!important;
+				border-radius: 5px;
+			}
+			
+[ ] Voir la mise en page des pages de commandes ?
+
+[ ] Traductions
+	[ ] Inventories => Inventaires
+	[ ] Start => Commencer
+	[ ] Started => Commencé
+	[ ] BudgetRestant => Budget Restant (HT)
+	
+[ ] Warning: A non-numeric value encountered in C:\dolibarr\www\dolibarr\htdocs\core\class\commonobject.class.php on line 7443
+	
