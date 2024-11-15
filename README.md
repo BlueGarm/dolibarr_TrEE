@@ -5,6 +5,12 @@ Historique des modifications
 
 * * *
 
+### **Novembre 2024**
+
+*   Mise à jour vers 20.0.2
+
+* * *
+
 ### **Octobre 2024**
 
 *   Modifications du comportement des lignes de commandes dans le module commandes :
