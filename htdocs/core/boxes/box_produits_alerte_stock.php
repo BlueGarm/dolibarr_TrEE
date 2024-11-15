@@ -131,7 +131,8 @@ class box_produits_alerte_stock extends ModeleBoxes
 							}
 						}
 					}
-					// Modification : Requète commande en cours [134-155]
+
+					// Modification : Requète commande en cours [135-157]
 					global $db;
 					$sqle = "SELECT o.fk_statut, d.qty";
 					$sqle .= " FROM llx_commande_fournisseurdet as d";
@@ -145,8 +146,8 @@ class box_produits_alerte_stock extends ModeleBoxes
 					$obje = $resulte->fetch_all(MYSQLI_ASSOC);
 					
 					$sqlf = "SELECT SUM(r.qty) as sum_qty_received";
-					$sqlf .= " FROM llx_commande_fournisseur_dispatch as r";
-					$sqlf .= " INNER JOIN llx_commande_fournisseur as o on r.fk_commande = o.rowid";
+					$sqlf .= " FROM llx_receptiondet_batch as r";
+					$sqlf .= " INNER JOIN llx_commande_fournisseur as o on r.fk_element = o.rowid";
 					$sqlf .= " WHERE r.fk_product = ".$objp->rowid." AND o.fk_statut = 4";
 					
 					$resultf = $db->query($sqlf);
@@ -180,7 +181,23 @@ class box_produits_alerte_stock extends ModeleBoxes
 						'text' => $objp->label,
 					);
 
-					// Modification : Affichage du statut de commande [183-230]
+					if (!isModEnabled('dynamicprices') || empty($objp->fk_price_expression)) {
+						$price_base_type = $langs->trans($objp->price_base_type);
+						$price = ($objp->price_base_type == 'HT') ? price($objp->price) : $price = price($objp->price_ttc);
+					} else { //Parse the dynamic price
+						$productstatic->fetch($objp->rowid, '', '', 1);
+
+						require_once DOL_DOCUMENT_ROOT.'/product/dynamic_price/class/price_parser.class.php';
+						$priceparser = new PriceParser($this->db);
+						$price_result = $priceparser->parseProduct($productstatic);
+						if ($price_result >= 0) {
+							if ($objp->price_base_type == 'HT') {
+								$price_base_type = $langs->trans("HT");
+							}
+						}
+					}
+					
+								// Modification : Affichage du statut de commande [194-241]
 					$this->info_box_contents[$line][] = array(
 						'td' => 'class="center" width="125px"',
 						'text' => price2num($objp->total_stock, 'MS').' / '.$objp->seuil_stock_alerte,
@@ -230,7 +247,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 						}
 
 					$this->info_box_contents[$line][] = array(
-						// Modification : Affichage statut [233-236]
+						// Modification : Affichage statut [244-247]
 						'td' => 'class="center" width="75px"',
 						'text' => $info_reap,
 						'asis' => 1
