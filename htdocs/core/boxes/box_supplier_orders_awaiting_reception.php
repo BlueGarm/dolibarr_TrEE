@@ -36,16 +36,6 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
 	public $depends  = array("fournisseur");
 
 	/**
-	 * @var DoliDB Database handler.
-	 */
-	public $db;
-
-	public $param;
-	public $info_box_head = array();
-	public $info_box_contents = array();
-
-
-	/**
 	 *  Constructor
 	 *
 	 *  @param  DoliDB  $db         Database handler
@@ -92,14 +82,14 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
 			$sql .= ", c.fk_statut as status";
 			$sql .= " FROM ".MAIN_DB_PREFIX."societe as s";
 			$sql .= ", ".MAIN_DB_PREFIX."commande_fournisseur as c";
-			if (!$user->hasRight('societe', 'client', 'voir') && !$user->socid) {
+			if (!$user->hasRight('societe', 'client', 'voir')) {
 				$sql .= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
 			}
 			$sql .= " WHERE c.fk_soc = s.rowid";
 			$sql .= " AND c.entity IN (".getEntity('supplier_order').")";
 			//$sql .= " AND c.date_livraison IS NOT NULL"; // Modification : Désactivation ligne pour afficher toute les commandes
 			$sql .= " AND c.fk_statut IN (".CommandeFournisseur::STATUS_ORDERSENT.", ".CommandeFournisseur::STATUS_RECEIVED_PARTIALLY.")";
-			if (!$user->hasRight('societe', 'client', 'voir') && !$user->socid) {
+			if (!$user->hasRight('societe', 'client', 'voir')) {
 				$sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id);
 			}
 			if ($user->socid) {
@@ -124,7 +114,7 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
 					$datem = $this->db->jdate($objp->tms);
 
 					$supplierorderstatic->id = $objp->rowid;
-					$supplierorderstatic->date_commande = $date; //Modification : Affichage Date
+					$supplierorderstatic->date_commande = $date; // Modification : Affichage Date
 					$supplierorderstatic->ref = $objp->ref;
 					$supplierorderstatic->delivery_date = $delivery_date;
 					$supplierorderstatic->statut = $objp->status;
@@ -161,20 +151,20 @@ class box_supplier_orders_awaiting_reception extends ModeleBoxes
 						$delayIcon = img_warning($langs->trans("Late"));
 					}
 
-					// Modification : Affichage date de commade si date de livraison inconnue [164-177]
+					// Modification : Affichage date de commade si date de livraison inconnue [154-167]
 					if (!empty($delivery_date)) {
-					$this->info_box_contents[$line][] = array(
-						'td' => 'class="right"',
-						'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('DateDeliveryPlanned').' : ' .  dol_print_date($delivery_date, 'day', 'tzuserrel').'"><i class="fa fa-dolly" style="margin-left: 5px;"></i> '.dol_print_date($delivery_date, 'day', 'tzuserrel').'</span>',
-						'asis' => 1
-					);
-				} else {
-					$this->info_box_contents[$line][] = array(
-						'td' => 'class="right"',
-						'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('Date de Commande').' : ' . dol_print_date($date, 'day', 'tzuserrel').'"><i class="fas fa-file-export" style="margin-left: 5px;"></i> '.dol_print_date($date, 'day', 'tzuserrel').'</span>',
-						'asis' => 1
-					);
-				}
+						$this->info_box_contents[$line][] = array(
+							'td' => 'class="right"',
+							'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('DateDeliveryPlanned').' : ' .  dol_print_date($delivery_date, 'day', 'tzuserrel').'"><i class="fa fa-dolly" style="margin-left: 5px;"></i> '.dol_print_date($delivery_date, 'day', 'tzuserrel').'</span>',
+							'asis' => 1
+						);
+					} else {
+						$this->info_box_contents[$line][] = array(
+							'td' => 'class="right"',
+							'text' => $delayIcon.'<span class="classfortooltip" title="'.$langs->trans('Date de Commande').' : ' . dol_print_date($date, 'day', 'tzuserrel').'"><i class="fas fa-file-export" style="margin-left: 5px;"></i> '.dol_print_date($date, 'day', 'tzuserrel').'</span>',
+							'asis' => 1
+						);
+					}
 
 					$line++;
 				}
