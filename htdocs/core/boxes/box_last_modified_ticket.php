@@ -36,15 +36,6 @@ class box_last_modified_ticket extends ModeleBoxes
 	public $depends = array("ticket");
 
 	/**
-	 * @var DoliDB Database handler.
-	 */
-	public $db;
-
-	public $param;
-	public $info_box_head = array();
-	public $info_box_contents = array();
-
-	/**
 	 * Constructor
 	 *  @param  DoliDB  $db         Database handler
 	 *  @param  string  $param      More parameters
@@ -74,7 +65,7 @@ class box_last_modified_ticket extends ModeleBoxes
 
 		$text = $langs->trans("BoxLastModifiedTicketDescription", $max);
 		$this->info_box_head = array(
-			'text' => $text,
+			'text' => $text.'<a class="paddingleft" href="'.DOL_URL_ROOT.'/ticket/list.php?sortfield=t.tms&sortorder=DESC"><span class="badge">...</span></a>',
 			'limit' => dol_strlen($text)
 		);
 
@@ -93,7 +84,7 @@ class box_last_modified_ticket extends ModeleBoxes
 			$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."c_ticket_severity as severity ON severity.code=t.severity_code";
 			$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."societe as s ON s.rowid=t.fk_soc";
 
-			$sql .= " WHERE t.entity IN (".getEntity('ticket').")";
+			$sql .= " WHERE t.entity IN (".getEntity('ticket').')';
 			//  		$sql.= " AND e.rowid = er.fk_event";
 			//if (empty($user->rights->societe->client->voir) && !$user->socid) $sql.= " WHERE s.rowid = sc.fk_soc AND sc.fk_user = " .((int) $user->id);
 			if ($user->socid) {
@@ -121,9 +112,7 @@ class box_last_modified_ticket extends ModeleBoxes
 					$ticket->subject = $objp->subject;
 					$ticket->date_creation = $datec;
 					$ticket->date_modification = $datem;
-					//$ticket->fk_statut = $objp->status;
-					//$ticket->fk_statut = $objp->status;
-					//Modification : Orthographe pour badge
+					// Modification : Orthographe pour badge
 					$ticket->fk_statut = $objp->status;
 					$ticket->status = $objp->status;
 					if ($objp->fk_soc > 0) {
@@ -175,7 +164,7 @@ class box_last_modified_ticket extends ModeleBoxes
 					// Statut
 					$this->info_box_contents[$i][$r] = array(
 						'td' => 'class="right nowraponall"',
-						'text' => $ticket->getLibStatut(3),
+						'text' => $ticket->getLibStatut(3)
 					);
 					$r++;
 
