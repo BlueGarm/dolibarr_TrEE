@@ -41,17 +41,6 @@ class box_produits_alerte_stock extends ModeleBoxes
 	public $depends = array("produit");
 
 	/**
-	 * @var DoliDB Database handler.
-	 */
-	public $db;
-
-	public $param;
-
-	public $info_box_head = array();
-	public $info_box_contents = array();
-
-
-	/**
 	 *  Constructor
 	 *
 	 *  @param  DoliDB	$db      	Database handler
@@ -64,7 +53,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 		$this->db = $db;
 
 		$listofmodulesforexternal = explode(',', getDolGlobalString('MAIN_MODULES_FOR_EXTERNAL'));
-		$tmpentry = array('enabled'=>((isModEnabled("product") || isModEnabled("service")) && isModEnabled('stock')), 'perms'=>!empty($user->rights->stock->lire), 'module'=>'product|service|stock');
+		$tmpentry = array('enabled'=>((isModEnabled("product") || isModEnabled("service")) && isModEnabled('stock')), 'perms'=>$user->hasRight('stock', 'lire'), 'module'=>'product|service|stock');
 		$showmode = isVisibleToUserType(($user->socid > 0 ? 1 : 0), $tmpentry, $listofmodulesforexternal);
 		$this->hidden = ($showmode != 1);
 	}
@@ -142,8 +131,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 							}
 						}
 					}
-
-					// Modification : Requète commande en cours [145-167]
+					// Modification : Requète commande en cours [134-155]
 					global $db;
 					$sqle = "SELECT o.fk_statut, d.qty";
 					$sqle .= " FROM llx_commande_fournisseurdet as d";
@@ -192,7 +180,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 						'text' => $objp->label,
 					);
 
-					// Modification : Affichage du statut de commande [194-241]
+					// Modification : Affichage du statut de commande [183-230]
 					$this->info_box_contents[$line][] = array(
 						'td' => 'class="center" width="125px"',
 						'text' => price2num($objp->total_stock, 'MS').' / '.$objp->seuil_stock_alerte,
@@ -242,7 +230,7 @@ class box_produits_alerte_stock extends ModeleBoxes
 						}
 
 					$this->info_box_contents[$line][] = array(
-						// Modification : Affichage statut [244-247]
+						// Modification : Affichage statut [233-236]
 						'td' => 'class="center" width="75px"',
 						'text' => $info_reap,
 						'asis' => 1
