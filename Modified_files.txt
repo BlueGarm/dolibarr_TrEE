@@ -62,12 +62,13 @@
 	
 [X] htdocs/core/tpl/objectline_create.tpl.php
 	Affichage ou masquage champs en fonction produit prédéfinie ou non
+	Désactive le CKE pour la création des commandes
 
 [X] htdocs/fourn/class/fournisseur.commande.class.php
 	Décommentage pour alerte si date livraison dépassée
 	
 [X] htdocs/fourn/commande/card.php	
-	Utilisation de la référence founisseurs saisie ou système sur produit prédéfinie
+	Utilisation de la référence fournisseurs saisie ou système sur produit prédéfinie
 	Alerte Retard date de commande/Date de livraison fiche commande
 	
 [X] htdocs/fourn/commande/list.php
