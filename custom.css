@@ -443,3 +443,10 @@ div.fieldline_options_add_bdd:has(input[checked][disabled]) {
     color : #bb0b0b!important;
     font-style: italic!important;
 }
+
+/* Liste Projet */
+.amount.rest.negatif {
+  color: #bb0b0b;
+  font-weight: bold;
+  font-style: italic;
+}
