@@ -2026,19 +2026,23 @@ while ($i < $imaxinloop) {
 				$total_commande = $total_commande->fetch_assoc();
 				$budget_rest = (($obj->budget_amount)-($total_commande["total_ht"]));
 				$update_budget_rest = $db->query("UPDATE llx_projet SET budget_rest = " . $budget_rest . " WHERE llx_projet.rowid = " . $object->id);
+			
 			// Affichage correct prix
-			print '<span class="amount';
+			print '<span class="amount rest';
 			if ($budget_rest < 0) {
 				print ' negatif';
 			}
-			print '">'.price((($obj->budget_amount)-($total_commande["total_ht"])), '', $langs, 1, 0, 2, $conf->currency).'</span><br />';
-			$totalarray['val']['p.budget_rest'] += $obj->budget_rest;																						  
-		}
-		print '</td>';
+			print '">'.price($budget_rest, '', $langs, 1, 0, 2, $conf->currency).'</span>';
+			//$totalarray['val']['p.budget_rest'] += $obj->budget_rest;
+			if (!isset($totalarray['val']['p.budget_rest'])) {
+				$totalarray['val']['p.budget_rest'] = $budget_rest;
+			} else {
+				$totalarray['val']['p.budget_rest'] += $budget_rest;
+			}
+			}															  
+			print '</td>';
 			if (!$i) {
 				$totalarray['nbfield']++;
-			}
-			if (!$i) {
 				$totalarray['pos'][$totalarray['nbfield']] = 'p.budget_rest';
 			}
 		}
